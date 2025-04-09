@@ -20,7 +20,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt && \
     rm -rf ~/.cache/pip/*
 
 # Copy the application code
-COPY app/ ${SPARK_HOME}/app/
+COPY . ${SPARK_HOME}/app/
 
 # Expose Spark ports
 EXPOSE 4040 7077 8080

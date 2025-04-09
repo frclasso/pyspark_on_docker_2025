@@ -3,13 +3,24 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType, 
 from pyspark.sql.functions import *
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from spark_connection import spark_conn
+# from spark_connection import spark_conn
+from pyspark.sql import SparkSession
 
 
-# data = os.path.join(os.path.dirname(__file__), '../datasets/fake_patient_visit_data.csv')
-# data = os.path.abspath(data)
 
-data = '/opt/bitnami/spark/app/datasets'
+spark_conn = (
+    SparkSession.builder
+    .appName("YourAppName")
+    .master("spark://spark-master:7077")  # Adjust master URL as needed
+    .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+    .config("spark.kryo.registrationRequired", "false")
+    .getOrCreate()
+)
+
+
+# Define the checkpoint directory
+# checkpoint_dir = "/opt/bitnami/spark/checkpoints/ortho_checkpoint"
+data = '/opt/bitnami/spark/app/datasets/fake_patient_visit_data/' 
 
 
 # Read streaming data from a socket

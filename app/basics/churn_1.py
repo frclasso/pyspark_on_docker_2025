@@ -25,10 +25,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Update the file path to match the mounted volume structure
 # Check if file exists
-file_path = "/opt/bitnami/spark/app/datasets/fake_patient_visit_data.csv"
-# file_path = "/opt/bitnami/spark/datasets/fake_patient_visit_data.csv"
+file_path = '/opt/bitnami/spark/app/datasets/churn/'
 if not os.path.exists(file_path):
     raise FileNotFoundError(f"CSV file not found at {file_path}")
 
@@ -43,6 +41,8 @@ spark = SparkSession.builder \
     .config("spark.kryoserializer.buffer.max", "512m") \
     .config("spark.driver.bindAddress", "0.0.0.0") \
     .config("spark.driver.host", "spark-master") \
+    .config("spark.eventLog.enabled", "true") \
+    .config("spark.eventLog.dir", "/tmp/spark-events") \
     .getOrCreate()
 
 try:
@@ -85,7 +85,7 @@ except Exception as e:
     logger.error(f"An error occurred during data cleaning and preprocessing: {str(e)}")
     raise
 
-try
+try:
     # Step 3: Feature Engineering
 
     # Select the features and label column
@@ -122,7 +122,7 @@ except Exception as e:
     logger.error(f"An error occurred during model training and prediction: {str(e)}")
     raise
 
-try
+try:
     # Step 5: Evaluate the Model
     from pyspark.ml.evaluation import BinaryClassificationEvaluator
 
