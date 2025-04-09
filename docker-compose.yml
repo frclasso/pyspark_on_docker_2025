@@ -4,6 +4,7 @@ services:
     command: bin/spark-class org.apache.spark.deploy.master.Master
     container_name: spark_on_docker-spark-master-1
     ports:
+      - "4040:4040"
       - "8080:8080"
       - "7077:7077"
     environment:
@@ -12,7 +13,6 @@ services:
       - /path/to/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
       - ./app:/opt/bitnami/spark/app
       - ./datasets:/opt/bitnami/spark/app/datasets
-      # - ./checkpoints:/opt/bitnami/spark/checkpoints:rw
 
 
   spark-worker-1:
