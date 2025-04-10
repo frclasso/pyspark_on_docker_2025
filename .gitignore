@@ -1,3 +1,6 @@
 venv/
-
+checkpoints/
+spark-events/
 anotacoes.md
+__pycache__/
+*.pyc
