@@ -27,5 +27,5 @@ records_df = pd.DataFrame(data=data , columns=["PID", "Name", "DID", "DName", "V
 print(records_df.head())
 
 # Optional: Save to CSV
-records_df.to_csv("app/datasets/fake_patient_visit_data.csv", index=False)
+records_df.to_csv("/datasets/fake_patient_visit_data/fake_patient_visit_data.csv", index=False)
 

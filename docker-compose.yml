@@ -1,5 +1,6 @@
 services:
   spark-master:
+    image: bitnami/spark:3.5.0
     build: .
     command: bin/spark-class org.apache.spark.deploy.master.Master
     container_name: spark_on_docker-spark-master-1
@@ -8,15 +9,16 @@ services:
       - "8080:8080"
       - "7077:7077"
     environment:
-    - SPARK_MODE=master
+      - SPARK_MODE=master
+      - PYTHONPATH=/opt/bitnami/spark/app
     volumes:
       - /path/to/spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
       - ./app:/opt/bitnami/spark/app
       - ./datasets:/opt/bitnami/spark/app/datasets
-
+      - ./spark-events:/tmp/spark-events
 
   spark-worker-1:
-    image: bitnami/spark:latest
+    image: bitnami/spark:3.5.0
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark_on_docker-node-1
     depends_on:
@@ -26,9 +28,11 @@ services:
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2g
       SPARK_MASTER_URL: spark://spark-master:7077
+    volumes:
+      - ./datasets:/opt/bitnami/spark/app/datasets
 
   spark-worker-2:
-    image: bitnami/spark:latest
+    image: bitnami/spark:3.5.0
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
     container_name: spark_on_docker-node-2
     depends_on:
@@ -38,3 +42,5 @@ services:
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 2g
       SPARK_MASTER_URL: spark://spark-master:7077
+    volumes:
+      - ./datasets:/opt/bitnami/spark/app/datasets

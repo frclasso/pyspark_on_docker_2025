@@ -1,4 +1,4 @@
-from app.spark_connection import spark_conn
+from app.utils.spark_connection import spark_conn
 
 # Sample data: list of tuples
 data = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]

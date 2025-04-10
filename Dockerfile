@@ -7,17 +7,21 @@ WORKDIR ${SPARK_HOME}
 
 USER root
 
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends \
-        python3-pip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /var/lib/apt/lists/partial && \
+apt-get update -qq && \
+apt-get install -y --no-install-recommends \
+    python3-pip && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file and install dependencies
 COPY requirements.txt ${SPARK_HOME}/
+
 RUN pip3 install --no-cache-dir -r requirements.txt && \
     pip3 install --upgrade pip && \
     rm -rf ~/.cache/pip/*
+
+
 
 # Copy the application code
 COPY . ${SPARK_HOME}/app/

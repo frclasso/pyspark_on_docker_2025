@@ -1,3 +1,22 @@
+import os
+from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import VectorAssembler
+from utils.spark_connection import spark_conn
+
+import sys
+sys.path.append('/opt/bitnami/spark/app')
+
+# Configure logging
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Check if file exists
+file_path = '/opt/bitnami/spark/app/datasets/churn/churn1.csv'
+if not os.path.exists(file_path):
+    raise FileNotFoundError(f"CSV file not found at {file_path}")
+
+
 """
 Project Scenario: Predicting Customer Churn
 
@@ -12,47 +31,15 @@ The goal of this project is to:
     Build a machine learning model to predict customer churn.
     Evaluate the model and make predictions.
 """
-from pyspark.sql import SparkSession
-from pyspark.ml.feature import StringIndexer
-from pyspark.ml.feature import VectorAssembler
-
-import logging
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# Check if file exists
-file_path = '/opt/bitnami/spark/app/datasets/churn/'
-if not os.path.exists(file_path):
-    raise FileNotFoundError(f"CSV file not found at {file_path}")
-
-
-# Create Spark session with specific configurations
-spark = SparkSession.builder \
-    .appName("ChurnAnalysis") \
-    .master("spark://spark-master:7077") \
-    .config("spark.driver.memory", "1g") \
-    .config("spark.executor.memory", "1g") \
-    .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer") \
-    .config("spark.kryoserializer.buffer.max", "512m") \
-    .config("spark.driver.bindAddress", "0.0.0.0") \
-    .config("spark.driver.host", "spark-master") \
-    .config("spark.eventLog.enabled", "true") \
-    .config("spark.eventLog.dir", "/tmp/spark-events") \
-    .getOrCreate()
 
 try:
     # Log Spark configuration for debugging
-    logger.info(f"Spark version: {spark.version}")
-    logger.info(f"Spark configurations: {spark.sparkContext.getConf().getAll()}")
+    logger.info(f"Spark version: {spark_conn.version}")
+    logger.info(f"Spark configurations: {spark_conn.sparkContext.getConf().getAll()}")
     logger.info(f"Reading CSV file from: {file_path}")
     
     # Read the CSV file
-    data = spark.read \
+    data = spark_conn.read \
         .option("header", "true") \
         .option("inferSchema", "true") \
         .option("mode", "DROPMALFORMED") \

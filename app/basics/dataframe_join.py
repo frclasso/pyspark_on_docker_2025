@@ -1,4 +1,4 @@
-from app.spark_connection import spark_conn
+from app.utils.spark_connection import spark_conn
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 from pyspark.sql.functions import coalesce, lit, col
 
