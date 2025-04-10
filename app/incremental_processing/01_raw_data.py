@@ -1,5 +1,9 @@
 from datetime import datetime
 from utils.spark_connection import spark_conn
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 import sys
 sys.path.append('/opt/bitnami/spark/app')
@@ -26,6 +30,21 @@ raw_data = [
 Columns = ["account_id", "address_id", "order_id", "delivered_order_time"]
 
 raw_df = spark_conn.createDataFrame(data=raw_data, schema=Columns)
+logging.info("DataFrame created successfully.")
+
 raw_df.printSchema()
 raw_df.show(truncate=False)
 
+# Save data on database
+persisting = (raw_df.write
+            .format("jdbc")
+            .option("url", "jdbc:postgresql://postgres:5432/sparkdb")
+            .option("dbtable", "raw_people")
+            .option("user", "sparkuser")
+            .option("password", "sparkpass")
+            .option("driver", "org.postgresql.Driver")
+            .mode("overwrite")
+            .save()
+        )
+
+logging.info("Data persisted successfully.")

@@ -16,6 +16,7 @@ services:
       - ./app:/opt/bitnami/spark/app
       - ./datasets:/opt/bitnami/spark/app/datasets
       - ./spark-events:/tmp/spark-events
+      - ./jars:/opt/bitnami/spark/jars
 
   spark-worker-1:
     image: bitnami/spark:3.5.0
@@ -30,6 +31,8 @@ services:
       SPARK_MASTER_URL: spark://spark-master:7077
     volumes:
       - ./datasets:/opt/bitnami/spark/app/datasets
+      - ./jars:/opt/bitnami/spark/jars
+
 
   spark-worker-2:
     image: bitnami/spark:3.5.0
@@ -44,3 +47,20 @@ services:
       SPARK_MASTER_URL: spark://spark-master:7077
     volumes:
       - ./datasets:/opt/bitnami/spark/app/datasets
+      - ./jars:/opt/bitnami/spark/jars
+
+
+  postgres:
+      image: postgres:15
+      container_name: spark_on_docker-postgres
+      environment:
+        POSTGRES_USER: sparkuser
+        POSTGRES_PASSWORD: sparkpass
+        POSTGRES_DB: sparkdb
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
