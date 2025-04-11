@@ -1,5 +1,4 @@
 from datetime import datetime
-# from utils.spark_connection import spark_conn
 import logging
 
 logging.basicConfig(level=logging.INFO)

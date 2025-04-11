@@ -1,1 +1,2 @@
 from .gen_raw_data import generate_raw_data, persisting_data
+from .read_table_raw_people import read_table_raw_people
