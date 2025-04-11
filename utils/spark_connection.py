@@ -7,13 +7,7 @@ spark_conn = (SparkSession.builder
                .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                .config("spark.kryoserializer.buffer.max", "512m")
                .config("spark.eventLog.enabled", "true")
-               .config("spark.jars", "/opt/bitnami/spark/jars/postgresql-42.6.0.jar")
+               # .config("spark.jars", "/opt/bitnami/spark/jars/postgresql-42.6.0.jar")
+               .config("spark.jars", "/opt/spark/jars/postgresql-42.6.0.jar") 
                .getOrCreate()
             )
-
-
-
-# spark_conn = SparkSession.builder \
-#     .appName("PostgreSQL Connection") \
-#     .config("spark.jars", "/opt/bitnami/spark/jars/postgresql-42.6.0.jar") \
-#     .getOrCreate()

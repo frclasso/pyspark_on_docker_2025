@@ -16,10 +16,13 @@ RUN mkdir -p /var/lib/apt/lists/partial && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file and install dependencies
-COPY requirements.txt ${SPARK_HOME}/app/requirements.txt
-COPY . ${SPARK_HOME}/app/
+COPY requirements.txt ${SPARK_HOME}/requirements.txt
+COPY . ${SPARK_HOME}/
 
-RUN pip3 install --no-cache-dir -r ${SPARK_HOME}/app/requirements.txt && \
+# Add this line before the CMD instruction
+RUN curl -o ${SPARK_HOME}/jars/postgresql-42.6.0.jar https://jdbc.postgresql.org/download/postgresql-42.6.0.jar
+
+RUN pip3 install --no-cache-dir -r ${SPARK_HOME}/requirements.txt && \
     pip3 install --upgrade pip && \
     rm -rf ~/.cache/pip/*
 

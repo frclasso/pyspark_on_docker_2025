@@ -1,0 +1,6 @@
+anotacoes.md
+README.md
+venv/
+.git
+.gitignore
+__pycache__/
