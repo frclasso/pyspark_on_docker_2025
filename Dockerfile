@@ -1,6 +1,7 @@
 FROM apache/spark:3.5.0
 
-ENV SPARK_HOME=/opt/bitnami/spark \
+# Update SPARK_HOME to match the default path in the base image
+ENV SPARK_HOME=/opt/spark \
     PYTHONPATH=${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-0.10.9.7-src.zip
 
 WORKDIR ${SPARK_HOME}
