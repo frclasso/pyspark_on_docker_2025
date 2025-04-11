@@ -4,8 +4,10 @@
 ## First things first
     $ mkdirs spark_on_docker/app/basics
     $ docker-compose down up -d --build  (build or rebuild the application)
-    $ docker-compose up -d               (stop)
     $ docker-compose down -v             (force stop)
+    $ docker-compose  build --no-cache   (build without cache)
+    $ docker-compose up -d               (start/re-start)
+
 
 
 ## Check the logs content and getting the connection information
@@ -30,14 +32,14 @@
 
 
 # Basic tutorial
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/gen_fake_records.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/anyfilename.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/create_rdd.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/dataframe_join.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/create_dataframe.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/ranking.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/read_stream.py
-- docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/bitnami/spark/app/basics/churn_1.py
+- ../opt/bitnami/spark/app/gen_fake_records.py
+- ../opt/bitnami/spark/anyfilename.py
+- .../opt/bitnami/spark/app/basics/create_rdd.py
+- ../opt/bitnami/spark/app/basics/dataframe_join.py
+- ../opt/bitnami/spark/app/basics/create_dataframe.py
+- ../opt/bitnami/spark/app/basics/ranking.py
+- ../opt/bitnami/spark/app/basics/read_stream.py
+- ../opt/bitnami/spark/app/basics/churn_1.py
 
 # References:
 - https://medium.com/towards-data-engineering/a-beginners-guide-to-incremental-data-processing-in-pyspark-58034302fb64

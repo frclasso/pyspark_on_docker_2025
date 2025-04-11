@@ -1,6 +1,6 @@
 FROM apache/spark:3.5.0
 
-ENV SPARK_HOME=/opt/spark \
+ENV SPARK_HOME=/opt/bitnami/spark \
     PYTHONPATH=${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-0.10.9.7-src.zip
 
 WORKDIR ${SPARK_HOME}
@@ -8,23 +8,19 @@ WORKDIR ${SPARK_HOME}
 USER root
 
 RUN mkdir -p /var/lib/apt/lists/partial && \
-apt-get update -qq && \
-apt-get install -y --no-install-recommends \
-    python3-pip && \
-apt-get clean && \
-rm -rf /var/lib/apt/lists/*
+    apt-get update -qq && \
+    apt-get install -y --no-install-recommends \
+        python3-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file and install dependencies
-COPY requirements.txt ${SPARK_HOME}/
+COPY requirements.txt ${SPARK_HOME}/app/requirements.txt
+COPY . ${SPARK_HOME}/app/
 
-RUN pip3 install --no-cache-dir -r requirements.txt && \
+RUN pip3 install --no-cache-dir -r ${SPARK_HOME}/app/requirements.txt && \
     pip3 install --upgrade pip && \
     rm -rf ~/.cache/pip/*
-
-
-
-# Copy the application code
-COPY . ${SPARK_HOME}/app/
 
 # Expose Spark ports
 EXPOSE 4040 7077 8080

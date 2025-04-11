@@ -13,5 +13,5 @@ pytz==2025.2
 six==1.17.0
 tomli==2.2.1
 tzdata==2025.2
-psycopg2-binary==2.9.10 
-pgsql==2.2
+psycopg2-binary
+pgsql
