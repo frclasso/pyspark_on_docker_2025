@@ -39,19 +39,3 @@ def generate_raw_data(spark_conn):
         return None
 
 
-def persisting_data(df):
-    """Save data on database"""
-    try:
-        df.write.format("jdbc") \
-            .option("url", "jdbc:postgresql://postgres:5432/sparkdb") \
-            .option("dbtable", "raw_people") \
-            .option("user", "sparkuser") \
-            .option("password", "sparkpass") \
-            .option("driver", "org.postgresql.Driver") \
-            .mode("overwrite") \
-            .save()
-        logging.info("Data persisted successfully.")
-    except Exception as e:
-        logging.error(f"Error persisting data: {e}")
-        return None
-
