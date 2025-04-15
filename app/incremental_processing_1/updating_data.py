@@ -1,7 +1,8 @@
 from datetime import datetime
 import logging
 from pyspark.sql.functions import *
-from read_write_data import write_table, read_table, appendDataOnTable
+from utils.spark_connection import spark_conn
+from .read_write_data import write_table, read_table, appendDataOnTable, createDataframe
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,42 +44,26 @@ updated_raw_data = [
 Columns = ["account_id","address_id", "order_id", "delivered_order_time"]
 
 
-# Create a SparkSession
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-spark_conn = (SparkSession.builder
-               .appName("IncrementalDataProcessing")
-               .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-               .config("spark.kryoserializer.buffer.max", "512m")
-               .config("spark.eventLog.enabled", "true")
-               .config("spark.jars", "/opt/spark/jars/postgresql-42.6.0.jar") 
-               .getOrCreate()
-            )
+updated_raw_df = createDataframe(spark_conn=spark_conn, data=updated_raw_data, schema=Columns)
 
 
-updated_raw_df = spark_conn.createDataFrame(data=updated_raw_data, schema=Columns)
-
-def appendData(dataframe, tableName):
+def appendData(spark_conn, dataframe, tableName):
     """Append new data to the existing raw data"""
     try:
         # Read the existing raw data
         existing_raw_df = read_table(spark_conn, tableName)
-        logging.info(f">>>>>>>>>Previous numbers of rows:{dataframe.count()}")
+        if existing_raw_df is None:
+            logger.error(f"Failed to read existing data from table {tableName}.")
+            return
+        logging.info(f">>>>>>>>>Previous numbers of rows: {existing_raw_df.count()}")
         # Append the new data to the existing raw data
         new_updated_raw_df = existing_raw_df.union(dataframe)
-        logging.info(f">>>>>>>>>New rows to insert:{new_updated_raw_df.count()}")
+        logging.info(f">>>>>>>>>New rows to insert: {new_updated_raw_df.count()}")
         # Write the updated raw data back to the table
         appendDataOnTable(new_updated_raw_df, tableName)
-        logger.info(f"Data appended  on table {tableName} successfully.")
+        logger.info(f"Data appended on table {tableName} successfully.")
     except Exception as e:
         logger.error(f"Error appending data {tableName}: {e}")
 
 
-tableName="raw_people"
-appendData(updated_raw_df, tableName)
 
-updated_people =  read_table(spark_conn, tableName)
-logging.info(f">>>>>>>>> After updating, the total of rows:{updated_people.count()}!")
-# TempView
-updated_people.createOrReplaceTempView("view_updated_people")
-updated_people.show()

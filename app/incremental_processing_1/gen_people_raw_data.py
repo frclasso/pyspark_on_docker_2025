@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 import sys
 sys.path.append('/opt/bitnami/spark/app')
 
-raw_data = [
+people_raw_data = [
     ("ACC001", "ADD001", "ORD001", datetime(2020, 9, 14, 12, 0)),
     ("ACC001", "ADD001", "ORD002", datetime(2019, 8, 19, 12, 0)),
     ("ACC001", "ADD001", "ORD003", datetime(2018, 5, 23, 12, 0)),
@@ -26,16 +26,5 @@ raw_data = [
     ("ACC003", "ADD023", "ORD016", datetime(2020, 9, 11, 12, 0)),
 ]
 
-Columns = ["account_id", "address_id", "order_id", "delivered_order_time"]
-
-def generate_raw_data(spark_conn):
-    """Generate raw data"""
-    try:
-        raw_df = spark_conn.createDataFrame(data=raw_data, schema=Columns)
-        logging.info("DataFrame created successfully.")
-        return raw_df
-    except Exception as e:
-        logging.error(f"Error generating raw data: {e}")
-        return None
-
+people_columns = ["account_id", "address_id", "order_id", "delivered_order_time"]
 

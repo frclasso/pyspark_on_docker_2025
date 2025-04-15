@@ -7,9 +7,24 @@ logger = logging.getLogger(__name__)
 import sys
 sys.path.append('/opt/bitnami/spark/app')
 
+
+def createDataframe(spark_conn, data, schema):
+    """Generate raw data"""
+    try:
+        raw_df = spark_conn.createDataFrame(data=data, schema=schema)
+        logging.info("DataFrame created successfully.")
+        return raw_df
+    except Exception as e:
+        logging.error(f"Error generating raw data: {e}")
+        return None
+    
+
 def read_table(spark_conn, tableName):
     """Read table data raw_people"""
     try:
+        if spark_conn is None:
+            logging.error("spark_conn is None. Ensure it is initialized properly.")
+            return None
         # Read table data raw_people
         raw_df = spark_conn.read.format("jdbc") \
             .option("url", "jdbc:postgresql://postgres:5432/sparkdb") \
@@ -57,3 +72,4 @@ def appendDataOnTable(dataframe, tableName):
     except Exception as e:
         logging.error(f"Error persisting data: {e}")
         return None
+    
