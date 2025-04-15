@@ -143,3 +143,4 @@ print("Done")
 
 # Reference
 # https://medium.com/towards-data-engineering/a-beginners-guide-to-incremental-data-processing-in-pyspark-58034302fb64
+# https://medium.com/towards-data-engineering/getting-started-with-incremental-data-processing-in-pyspark-169b4aeda6b3

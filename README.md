@@ -41,7 +41,7 @@ docker-compose exec spark-master spark-submit --master spark://spark-master:7077
 - ../opt/bitnami/spark/app/basics/read_stream.py
 - ../opt/bitnami/spark/app/basics/churn_1.py
 
-# Incremental processing
+# Incremental processing methods
 
 
 ## Checking database
@@ -49,6 +49,7 @@ docker-compose exec spark-master spark-submit --master spark://spark-master:7077
 
 # References:
 - https://medium.com/towards-data-engineering/a-beginners-guide-to-incremental-data-processing-in-pyspark-58034302fb64
+- https://medium.com/towards-data-engineering/getting-started-with-incremental-data-processing-in-pyspark-169b4aeda6b3
 - https://medium.com/@mehmood9501/using-apache-spark-docker-containers-to-run-pyspark-programs-using-spark-submit-afd6da480e0f
 - https://medium.com/@nomannayeem/pyspark-made-simple-from-basics-to-big-data-mastery-cb1d702968be
 - https://medium.com/@yoloshe302/pyspark-tutorial-read-and-write-streaming-data-401ed3d860e7
