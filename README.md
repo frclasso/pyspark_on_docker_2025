@@ -29,20 +29,15 @@ $ docker logs spark_on_docker-spark-master-1
 
 
 # Execute the pyspark file using the following command
-docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/main.py
 
-# Basic tutorial
-- ../opt/bitnami/spark/app/gen_fake_records.py
-- ../opt/bitnami/spark/anyfilename.py
-- .../opt/bitnami/spark/app/basics/create_rdd.py
-- ../opt/bitnami/spark/app/basics/dataframe_join.py
-- ../opt/bitnami/spark/app/basics/create_dataframe.py
-- ../opt/bitnami/spark/app/basics/ranking.py
-- ../opt/bitnami/spark/app/basics/read_stream.py
-- ../opt/bitnami/spark/app/basics/churn_1.py
+## Basic tutorial module
+ - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_basics.py
 
-# Incremental processing methods
+## Incremental processing module
+ - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_incremental.py
 
+## Window Fucntions module
+ - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_window_functions.py
 
 ## Checking database
 - docker exec -it spark_on_docker-postgres psql -U sparkuser -d sparkdb
@@ -54,3 +49,4 @@ docker-compose exec spark-master spark-submit --master spark://spark-master:7077
 - https://medium.com/@nomannayeem/pyspark-made-simple-from-basics-to-big-data-mastery-cb1d702968be
 - https://medium.com/@yoloshe302/pyspark-tutorial-read-and-write-streaming-data-401ed3d860e7
 - https://www.macrometa.com/event-stream-processing/spark-structured-streaming
+- https://medium.com/@dhanashrisaner.30/pyspark-window-functions-820ce4046b0b

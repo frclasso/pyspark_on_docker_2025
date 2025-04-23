@@ -1,4 +1,5 @@
 
+import os
 from faker import Faker
 import random
 from datetime import datetime
@@ -26,6 +27,9 @@ records_df = pd.DataFrame(data=data , columns=["PID", "Name", "DID", "DName", "V
 # Show sample data
 print(records_df.head())
 
-# Optional: Save to CSV
-records_df.to_csv("/datasets/fake_patient_visit_data/fake_patient_visit_data.csv", index=False)
+# Ensure the directory exists
+output_dir = "/datasets/fake_patient_visit_data"
+os.makedirs(output_dir, exist_ok=True)
 
+# Save the DataFrame to CSV
+records_df.to_csv(f"{output_dir}/fake_patient_visit_data.csv", index=False)
