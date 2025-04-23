@@ -10,10 +10,10 @@
 
 
 # Listing files
-docker exec -it spark_on_docker-spark-master-1 ls -la /opt/spark/
+$ docker exec -it spark_on_docker-spark-master-1 ls -la /opt/spark/
 
 # Check the logs content and getting the connection information
-    $ docker logs spark_on_docker-spark-master-1
+$ docker logs spark_on_docker-spark-master-1
 
 `WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable`
 
