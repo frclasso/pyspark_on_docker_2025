@@ -25,11 +25,11 @@ data = [generate_fake_record(pid) for pid in range(1, num_records + 1)]
 records_df = pd.DataFrame(data=data , columns=["PID", "Name", "DID", "DName", "VisitDate"])
 
 # Show sample data
-print(records_df.head())
+# print(records_df.head())
 
 # Ensure the directory exists
-output_dir = "/datasets/fake_patient_visit_data"
-os.makedirs(output_dir, exist_ok=True)
+# output_dir = "/datasets/fake_patient_visit_data"
+# os.makedirs(output_dir, exist_ok=True)
 
 # Save the DataFrame to CSV
-records_df.to_csv(f"{output_dir}/fake_patient_visit_data.csv", index=False)
+# records_df.to_csv(f"{output_dir}/fake_patient_visit_data.csv", index=False)

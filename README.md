@@ -3,17 +3,17 @@
 
 # First things first
     $ mkdirs spark_on_docker/app/basics
-    $ docker-compose down up -d --build  (build or rebuild the application)
+    $ docker-compose up -d --build  (build or rebuild the application)
     $ docker-compose down -v             (force stop)
     $ docker-compose  build --no-cache   (build without cache)
     $ docker-compose up -d               (start/re-start)
 
 
 # Listing files
-$ docker exec -it spark_on_docker-spark-master-1 ls -la /opt/spark/
+    $ docker exec -it spark_on_docker-spark-master-1 ls -la /opt/spark/
 
 # Check the logs content and getting the connection information
-$ docker logs spark_on_docker-spark-master-1
+    $ docker logs spark_on_docker-spark-master-1
 
 `WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable`
 
@@ -31,16 +31,22 @@ $ docker logs spark_on_docker-spark-master-1
 # Execute the pyspark file using the following command
 
 ## Basic tutorial module
- - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_basics.py
+    $ docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_basics.py
 
 ## Incremental processing module
- - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_incremental.py
+    $ docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_t3_incremental_processing.py
 
 ## Window Fucntions module
- - docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_window_functions.py
+    $ docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_window_functions.py
+
+## Run ETL module
+    $ docker-compose exec spark-master spark-submit --master spark://spark-master:7077 /opt/spark/app/run_t4_etl.py --config_file_name /opt/spark/app/app/t4_etl/src/job_config.json --env dev
+
 
 ## Checking database
-- docker exec -it spark_on_docker-postgres psql -U sparkuser -d sparkdb
+    $ docker exec -it spark_on_docker-postgres psql -U sparkuser -d sparkdb
+
+# =========================================================================================================================
 
 # References:
 - https://medium.com/towards-data-engineering/a-beginners-guide-to-incremental-data-processing-in-pyspark-58034302fb64
@@ -50,3 +56,4 @@ $ docker logs spark_on_docker-spark-master-1
 - https://medium.com/@yoloshe302/pyspark-tutorial-read-and-write-streaming-data-401ed3d860e7
 - https://www.macrometa.com/event-stream-processing/spark-structured-streaming
 - https://medium.com/@dhanashrisaner.30/pyspark-window-functions-820ce4046b0b
+- https://medium.com/towards-data-engineering/write-pyspark-etl-application-like-a-pro-1bdd6694acf6

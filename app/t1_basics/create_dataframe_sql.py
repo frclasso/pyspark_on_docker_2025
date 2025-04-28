@@ -7,10 +7,10 @@ data = [("Alice", 25), ("Bob", 30), ("Charlie", 35)]
 columns = ["Name", "Age"]
 
 # Create a DataFrame from the data
-df = spark.createDataFrame(data, columns)
+people_df = spark.createDataFrame(data, columns)
 
 # Register the DataFrame as a temporary view
-df.createOrReplaceTempView("people")
+people_df.createOrReplaceTempView("people")
 
 # Run a SQL query
 result = spark.sql("SELECT Name, Age FROM people WHERE Age > 30")

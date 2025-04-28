@@ -3,9 +3,9 @@ from datetime import datetime
 from utils.spark_connection import spark_conn
 import logging
 from pyspark.sql.functions import *
-from app.incremental_processing_1.read_write_data import write_table, read_table, appendDataOnTable, createDataframe
-from app.incremental_processing_1.gen_people_raw_data import people_raw_data, people_columns
-from app.incremental_processing_1.updating_data import appendData, updated_raw_df
+from app.t2_incremental_processing.read_write_data import write_table, read_table, appendDataOnTable, createDataframe
+from app.t2_incremental_processing.gen_people_raw_data import people_raw_data, people_columns
+from app.t2_incremental_processing.updating_data import appendData, updated_raw_df
 
 
 logging.basicConfig(level=logging.INFO)

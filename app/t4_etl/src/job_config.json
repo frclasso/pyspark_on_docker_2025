@@ -1,0 +1,28 @@
+{
+  "source": [
+    {
+      "name": "fact",
+      "storeType": "object_store",
+      "storeConfig": {
+        "path": "/opt/spark/app/t4_etl/datasets/orders_data.csv",
+        "format": "csv"
+      }
+    },
+    {
+      "name": "lookup",
+      "storeType": "object_store",
+      "storeConfig": {
+        "path": "/opt/spark/app/t4_etl/datasets/citytier_pincode.csv",
+        "format": "csv"
+      }
+    }
+  ],
+  "sink": {
+    "storeType": "object_store",
+    "storeConfig": {
+      "path": "/opt/spark/app/t4_etl/datasets/sink/{env}/orders_data_transformed.csv",
+      "format": "csv",
+      "mode": "overwrite"
+    }
+  }
+}
