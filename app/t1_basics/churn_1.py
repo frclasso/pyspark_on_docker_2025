@@ -11,11 +11,6 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Check if file exists
-file_path = '/opt/bitnami/spark/app/datasets/churn/churn1.csv'
-if not os.path.exists(file_path):
-    raise FileNotFoundError(f"CSV file not found at {file_path}")
-
 
 """
 Project Scenario: Predicting Customer Churn
@@ -32,93 +27,78 @@ The goal of this project is to:
     Evaluate the model and make predictions.
 """
 
-try:
-    # Log Spark configuration for debugging
-    logger.info(f"Spark version: {spark_conn.version}")
-    logger.info(f"Spark configurations: {spark_conn.sparkContext.getConf().getAll()}")
-    logger.info(f"Reading CSV file from: {file_path}")
-    
-    # Read the CSV file
-    data = spark_conn.read \
-        .option("header", "true") \
-        .option("inferSchema", "true") \
-        .option("mode", "DROPMALFORMED") \
-        .csv(file_path)
-    
-    # Log schema and row count for verification
-    logger.info("DataFrame Schema:")
-    data.printSchema()
-    logger.info(f"Row count: {data.count()}")
-    
-    # Show sample data
-    logger.info("Sample data:")
-    data.show(5)
+def cleaning_data(data):
+    try:
+        # Step 2: Data Cleaning and Preprocessing
+        data_cleaned = data.dropna()
 
-except Exception as e:
-    logger.error(f"An error occurred: {str(e)}")
-    raise
+        # Convert categorical columns to numerical ones using StringIndexer
+        indexer = StringIndexer(inputCol="PaymentMethod", outputCol="PaymentMethodIndex")
+        data_indexed = indexer.fit(data_cleaned).transform(data_cleaned)
 
-try:
-    # Step 2: Data Cleaning and Preprocessing
-    data_cleaned = data.dropna()
+        return data_indexed
+    except Exception as e:
+        logger.error(f"An error occurred during data cleaning and preprocessing: {str(e)}")
+        raise
 
-    # Convert categorical columns to numerical ones using StringIndexer
-    indexer = StringIndexer(inputCol="PaymentMethod", outputCol="PaymentMethodIndex")
-    data_indexed = indexer.fit(data_cleaned).transform(data_cleaned)
 
-    # Show the processed data
-    data_indexed.show(5)
-except Exception as e:
-    logger.error(f"An error occurred during data cleaning and preprocessing: {str(e)}")
-    raise
+def churn_feature_engineering(data_indexed):
+    try:
+        # Step 3: Feature Engineering
+        assembler = VectorAssembler(
+            inputCols=["Tenure", "MonthlyCharges", "TotalCharges", "PaymentMethodIndex"],
+            outputCol="features"
+        )
 
-try:
-    # Step 3: Feature Engineering
+        # Apply the assembler to the DataFrame
+        data_prepared = assembler.transform(data_indexed)
+        return data_prepared
+    except Exception as e:
+        logger.error(f"An error occurred during feature engineering: {str(e)}")
+        raise
 
-    # Select the features and label column
-    assembler = VectorAssembler(
-        inputCols=["Tenure", "MonthlyCharges", "TotalCharges", "PaymentMethodIndex"],
-        outputCol="features"
-    )
 
-    # Apply the assembler to the DataFrame
-    data_prepared = assembler.transform(data_indexed)
+def churn_model(data):
+    try:
+        # Step 1: Load the Data
+        # Step 2: Clean the Data
+        data_cleaned = cleaning_data(data)
 
-    # Show the prepared data
-    data_prepared.select("features", "Churn").show(5)
-except Exception as e:
-    logger.error(f"An error occurred during feature engineering: {str(e)}")
-    raise
+        # Step 3: Feature Engineering
+        data_prepared = churn_feature_engineering(data_cleaned)
 
-try:
-    # Step 4: Build and Train the Model
-    from pyspark.ml.classification import LogisticRegression
+         # Step 4: Build and Train the Model
+        from pyspark.ml.classification import LogisticRegression
 
-    # Initialize the Logistic Regression model
-    lr = LogisticRegression(featuresCol="features", labelCol="Churn")
+        # Initialize the Logistic Regression model
+        lr = LogisticRegression(featuresCol="features", labelCol="Churn")
 
-    # Train the model
-    model = lr.fit(data_prepared)
+        # Train the model
+        model = lr.fit(data_prepared)
 
-    # Make predictions on the dataset
-    predictions = model.transform(data_prepared)
+        # Make predictions on the dataset
+        predictions = model.transform(data_prepared)
 
-    # Show the predictions
-    predictions.select("Churn", "prediction", "probability").show(5)
-except Exception as e:
-    logger.error(f"An error occurred during model training and prediction: {str(e)}")
-    raise
+        return predictions
 
-try:
-    # Step 5: Evaluate the Model
-    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+    except Exception as e:
+        logger.error(f"An error occurred in the churn model pipeline: {str(e)}")
+        raise
 
-    # Initialize the evaluator
-    evaluator = BinaryClassificationEvaluator(labelCol="Churn", metricName="areaUnderROC")
 
-    # Evaluate the model
-    roc_auc = evaluator.evaluate(predictions)
-    print(f"Area under ROC curve: {roc_auc}")
-except Exception as e:
-    logger.error(f"An error occurred during model evaluation: {str(e)}")
-    raise
+def evaluate_model(predictions):
+    try:
+        # Step 5: Evaluate the Model
+        from pyspark.ml.evaluation import BinaryClassificationEvaluator
+
+        # Initialize the evaluator
+        evaluator = BinaryClassificationEvaluator(labelCol="Churn", metricName="areaUnderROC")
+
+        # Evaluate the model
+        roc_auc = evaluator.evaluate(predictions)
+        logger.info(f"Area under ROC curve: {roc_auc}")
+        return roc_auc
+    except Exception as e:
+        logger.error(f"An error occurred during model evaluation: {str(e)}")
+        raise
+

@@ -26,7 +26,7 @@ data = {
 data["TotalCharges"] = np.round(data["Tenure"] * data["MonthlyCharges"] * np.random.uniform(0.95, 1.05, 1000), 2)
 
 # Create DataFrame
-churn_records_df = pd.DataFrame(data)
+churn1_records_df = pd.DataFrame(data)
 
 # Save to CSV
 # file_path = "datasets/churn/churn1.csv" 
