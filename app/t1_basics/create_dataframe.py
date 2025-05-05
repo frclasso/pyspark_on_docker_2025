@@ -36,6 +36,3 @@ print()
 print("Sort by age in descending order")
 people_df.orderBy(df.Age.desc()).show()
 print()
-
-# Stop the SparkSession
-# spark_conn.stop()

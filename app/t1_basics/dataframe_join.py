@@ -52,10 +52,10 @@ print("Drop rows where the Age column has missing values =======================
 # df_cleaned_age = result_df.dropna(subset=["Age"])
 df_cleaned_age = result_df.filter(col("Age").isNotNull())
 # df_cleaned_age = result_df.dropna(subset=coalesce(result_df["Age"], lit(0)) < 30)
-df_cleaned_age.show()
+# df_cleaned_age.show()
 
 
 print("fill missing valuess ===================================================")
 # df_filled = result_df.fillna({"Age": 50, "Name": "Fabio"})
 df_filled = result_df.na.fill({"Age": 50}) # fillna is an alias for na.fill
-df_filled.show() 
+# df_filled.show() 

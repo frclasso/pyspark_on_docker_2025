@@ -21,19 +21,14 @@ result.show()
 
 print("Select only the 'Name' column")
 result = spark.sql("SELECT Name FROM people")
-result.show()
-print()
+# result.show()
+# print()
 
 print("Select  'Age  < 30' ")
 result = spark.sql("SELECT * FROM people WHERE Age < 30")
-result.show()
-print()
+# result.show()
+# print()
 
 print("Count people by age")
 result = spark.sql("SELECT Age, COUNT(*) as count FROM people GROUP BY Age")
-result.show()
-
-
-
-# Stop the SparkSession
-spark.stop()
+# result.show()
